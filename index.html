@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>SYSTEM PROTOCOL: SHRUTI & RAUNAK LOYALTY CORE</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Dancing+Script:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: ['"Fira Code"', "monospace"],
+              sans: ['"Plus Jakarta Sans"', "sans-serif"],
+              cursive: ['"Dancing Script"', "cursive"],
+            },
+            colors: {
+              love: {
+                bg: "#0d0714",
+                panel: "rgba(23, 13, 36, 0.75)",
+                border: "rgba(255, 42, 117, 0.3)",
+                pink: "#ff2a75",
+                cyan: "#00f0ff",
+                purple: "#a855f7",
+                emerald: "#10b981",
+                gold: "#fbbf24",
+              },
+            },
+            animation: {
+              "pulse-glow": "pulseGlow 2s infinite alternate",
+              float: "float 4s ease-in-out infinite",
+              "glow-pink": "glowPink 3s ease-in-out infinite alternate",
+            },
+            keyframes: {
+              pulseGlow: {
+                "0%": { boxShadow: "0 0 15px rgba(255, 42, 117, 0.2)" },
+                "100%": { boxShadow: "0 0 35px rgba(255, 42, 117, 0.6)" },
+              },
+              float: {
+                "0%, 100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-8px)" },
+              },
+              glowPink: {
+                "0%": { textShadow: "0 0 10px rgba(255, 42, 117, 0.5)" },
+                "100%": {
+                  textShadow:
+                    "0 0 25px rgba(255, 42, 117, 0.9), 0 0 40px rgba(0, 240, 255, 0.4)",
+                },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Ambient Midnight Cyber Background */
+      body {
+        background-color: #0d0714;
+        background-image:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(255, 42, 117, 0.08) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(0, 240, 255, 0.08) 0%,
+            transparent 40%
+          ),
+          linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px
+          );
+        background-size:
+          100% 100%,
+          100% 100%,
+          25px 25px,
+          25px 25px;
+        touch-action: manipulation;
+      }
+
+      /* Ambient Canvas overlay */
+      #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Glassmorphism Panel Utilities */
+      .glass-card {
+        background: rgba(20, 11, 32, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 42, 117, 0.25);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      }
+
+      .glass-card-cyan {
+        background: rgba(10, 22, 38, 0.75);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(0, 240, 255, 0.25);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      }
+
+      /* Custom Scrollbars */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(13, 7, 20, 0.9);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 42, 117, 0.4);
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 42, 117, 0.8);
+      }
+
+      /* Glowing Text FX */
+      .glow-pink {
+        text-shadow: 0 0 12px rgba(255, 42, 117, 0.7);
+      }
+      .glow-cyan {
+        text-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+      }
+      .glow-emerald {
+        text-shadow: 0 0 12px rgba(16, 185, 129, 0.7);
+      }
+
+      /* Smooth dodging button animation */
+      #no-btn {
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        will-change: transform;
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans text-gray-200 min-h-screen flex flex-col justify-between relative overflow-x-hidden select-none"
+  >
+    <!-- BACKGROUND CANVAS FOR FLOATING HEARTS & PARTICLES -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- SYSTEM NAVBAR / STATUS HEADER -->
+    <header
+      class="w-full border-b border-love-border bg-black/70 backdrop-blur-md sticky top-0 z-40 px-4 py-3"
+    >
+      <div
+        class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs"
+      >
+        <!-- Left: Identity Badge -->
+        <div
+          class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start"
+        >
+          <div class="flex items-center space-x-2">
+            <span class="relative flex h-3 w-3">
+              <span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-love-pink opacity-75"
+              ></span>
+              <span
+                class="relative inline-flex rounded-full h-3 w-3 bg-love-pink"
+              ></span>
+            </span>
+            <span
+              class="font-mono font-bold tracking-wider text-love-pink uppercase glow-pink text-xs sm:text-sm"
+            >
+              STATUS: SECURE & LOYAL TO SHRUTI
+            </span>
+          </div>
+          <div class="h-4 w-px bg-gray-800 hidden sm:block"></div>
+          <div class="text-gray-400 font-mono text-[11px] sm:text-xs">
+            ROOT USER: <span class="text-love-cyan font-bold">SHRUTI</span>
+          </div>
+        </div>
+
+        <!-- Center: Core Security Protocol -->
+        <div
+          class="flex items-center space-x-3 text-gray-400 font-mono text-[11px] sm:text-xs"
+        >
+          <div
+            class="flex items-center space-x-1.5 bg-pink-950/40 border border-love-pink/30 px-2.5 py-1 rounded-full"
+          >
+            <i
+              data-lucide="shield-check"
+              class="w-3.5 h-3.5 text-love-pink"
+            ></i>
+            <span>100% LOYALTY LOCKED</span>
+          </div>
+          <div
+            class="flex items-center space-x-1.5 bg-cyan-950/40 border border-love-cyan/30 px-2.5 py-1 rounded-full hidden md:flex"
+          >
+            <i data-lucide="lock" class="w-3.5 h-3.5 text-love-cyan"></i>
+            <span>SINGLE-TENANT: RAUNAK ➔ SHRUTI</span>
+          </div>
+        </div>
+
+        <!-- Right: Real-Time Counter & Audio Control -->
+        <div
+          class="flex items-center space-x-4 w-full sm:w-auto justify-between sm:justify-end"
+        >
+          <div
+            class="flex items-center space-x-1.5 font-mono text-love-emerald text-[11px] sm:text-xs"
+          >
+            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+            <span>UPTIME: <span id="uptime-counter">00:00:00</span></span>
+          </div>
+          <button
+            id="audio-toggle-btn"
+            class="flex items-center space-x-1.5 bg-purple-950/50 border border-love-purple/40 hover:border-love-purple text-love-purple px-2.5 py-1 rounded-lg font-mono text-[11px] transition-all"
+          >
+            <i data-lucide="volume-2" id="audio-icon" class="w-3.5 h-3.5"></i>
+            <span id="audio-text">SOUND: ON</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <main
+      class="max-w-5xl mx-auto w-full px-4 py-6 flex-grow flex flex-col gap-6 relative z-10"
+    >
+      <!-- TITLE HERO CARD -->
+      <section
+        class="glass-card rounded-2xl p-5 sm:p-7 border-l-4 border-l-love-pink relative overflow-hidden animate-pulse-glow"
+      >
+        <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+          <i data-lucide="heart" class="w-60 h-60 text-love-pink"></i>
+        </div>
+        <div
+          class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+        >
+          <div class="space-y-1.5">
+            <div
+              class="flex items-center space-x-2 text-love-cyan font-mono text-xs tracking-widest uppercase"
+            >
+              <i data-lucide="terminal" class="w-4 h-4"></i>
+              <span>Dedicated Devoted Terminal • v2026.FINAL</span>
+            </div>
+            <h1
+              class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight glow-pink font-sans"
+            >
+              APOLOGY & LOYALTY PROTOCOL
+            </h1>
+            <p
+              class="text-gray-300 text-xs sm:text-sm max-w-2xl leading-relaxed"
+            >
+              Shruti, yeh web system sirf aur sirf aapke liye coding se banaya
+              gaya hai. Koi robotic lines nahi, koi 3rd party access nahi—bas
+              pura sach aur absolute dedication! 💖
+            </p>
+          </div>
+          <div
+            class="flex items-center space-x-2 bg-pink-950/60 border border-love-pink/40 px-3.5 py-2 rounded-xl text-xs font-mono text-love-pink"
+          >
+            <i data-lucide="heart-handshake" class="w-4 h-4"></i>
+            <span>ONLY FOR SHRUTI</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUICK EXECUTABLE COMMAND BUTTONS -->
+      <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <button
+          onclick="executeCommand('system_diag')"
+          class="glass-card hover:bg-pink-950/40 border border-love-pink/40 text-love-pink p-3 rounded-xl flex items-center justify-center space-x-2 text-xs sm:text-sm font-mono font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <i data-lucide="activity" class="w-4 h-4"></i>
+          <span>[system_diag]</span>
+        </button>
+        <button
+          onclick="executeCommand('verify_loyalty')"
+          class="glass-card-cyan hover:bg-cyan-950/40 border border-love-cyan/40 text-love-cyan p-3 rounded-xl flex items-center justify-center space-x-2 text-xs sm:text-sm font-mono font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          <span>[verify_loyalty]</span>
+        </button>
+        <button
+          onclick="executeCommand('decrypt_promises')"
+          class="glass-card hover:bg-purple-950/40 border border-love-purple/40 text-love-purple p-3 rounded-xl flex items-center justify-center space-x-2 text-xs sm:text-sm font-mono font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <i data-lucide="key" class="w-4 h-4"></i>
+          <span>[decrypt_promises]</span>
+        </button>
+        <button
+          onclick="executeCommand('apology_log')"
+          class="glass-card hover:bg-emerald-950/40 border border-love-emerald/40 text-love-emerald p-3 rounded-xl flex items-center justify-center space-x-2 text-xs sm:text-sm font-mono font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <i data-lucide="file-text" class="w-4 h-4"></i>
+          <span>[apology_log]</span>
+        </button>
+      </section>
+
+      <!-- INTERACTIVE CLI TERMINAL CONSOLE -->
+      <section
+        class="glass-card rounded-2xl overflow-hidden border border-love-pink/40 flex flex-col h-[380px] sm:h-[420px] shadow-2xl relative"
+      >
+        <!-- Terminal Header -->
+        <div
+          class="bg-black/90 px-4 py-3 border-b border-love-border flex items-center justify-between text-xs font-mono text-gray-400"
+        >
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-3 h-3 rounded-full bg-red-500/80 cursor-pointer hover:opacity-100 opacity-80"
+              onclick="clearTerminal()"
+              title="Clear screen"
+            ></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+            <span class="ml-2 font-bold text-gray-300"
+              >raunak@shruti-loyalty-core:~#</span
+            >
+          </div>
+          <div class="flex items-center space-x-3 text-[11px]">
+            <span class="text-love-cyan hidden sm:inline">UTF-8 ENCRYPTED</span>
+            <button
+              onclick="clearTerminal()"
+              class="hover:text-white transition-colors"
+            >
+              Clear Console
+            </button>
+          </div>
+        </div>
+
+        <!-- Terminal Console Logs Output -->
+        <div
+          id="terminal-body"
+          class="p-4 sm:p-5 flex-grow overflow-y-auto font-mono text-xs sm:text-sm space-y-2.5 leading-relaxed"
+        >
+          <div class="text-love-pink font-bold">
+            [CORE SYSTEM BOOT SUCCESSFUL]<br />
+            Connected Host:
+            <span class="text-white">Raunak's Heart Cluster #01</span><br />
+            Authenticated Root User: <span class="text-love-cyan">Shruti</span
+            ><br />
+            --------------------------------------------------------------------------------
+          </div>
+          <div class="text-gray-300">
+            Welcome Shruti! Type any command or click the buttons above to
+            inspect diagnostic metrics, decrypt sealed promises, or execute
+            forgiveness.
+          </div>
+          <div class="text-love-gold">
+            &gt; Type <span class="text-love-pink font-bold">help</span> to view
+            available system routines.
+          </div>
+        </div>
+
+        <!-- Terminal Input Prompt -->
+        <div
+          class="bg-black/95 px-4 py-3 border-t border-love-border flex items-center space-x-2"
+        >
+          <span class="text-love-pink font-bold font-mono">&gt;</span>
+          <input
+            type="text"
+            id="terminal-input"
+            placeholder="Type command (e.g. verify_loyalty, system_diag, help)..."
+            class="w-full bg-transparent text-love-cyan focus:outline-none font-mono text-xs sm:text-sm placeholder-gray-600"
+            autocomplete="off"
+            spellcheck="false"
+            onkeydown="handleTerminalKey(event)"
+          />
+          <button
+            onclick="submitTypedCommand()"
+            class="bg-love-pink/20 border border-love-pink/50 text-love-pink hover:bg-love-pink hover:text-black px-3.5 py-1.5 rounded-lg font-mono text-xs transition-colors"
+          >
+            RUN
+          </button>
+        </div>
+      </section>
+
+      <!-- DYNAMIC CARDS CONTAINER (Appears when commands run) -->
+      <div
+        id="dynamic-display-area"
+        class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden"
+      >
+        <!-- Interactive Vault / Promise Cards Render Here -->
+      </div>
+
+      <!-- THE FORGIVENESS PROTOCOL MODULE -->
+      <section
+        id="forgiveness-module"
+        class="glass-card rounded-2xl p-6 sm:p-9 border border-love-pink/50 text-center relative overflow-hidden transition-all duration-500"
+      >
+        <div class="max-w-2xl mx-auto space-y-6">
+          <div
+            class="inline-flex items-center space-x-2 bg-pink-950/70 border border-love-pink/60 text-love-pink px-4 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider"
+          >
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+            <span>CRITICAL SYSTEM DECISION DIRECTIVE</span>
+          </div>
+
+          <h2
+            class="text-2xl sm:text-4xl font-extrabold text-white glow-pink tracking-tight font-sans"
+          >
+            Do You Forgive Me, Shruti? 💖
+          </h2>
+
+          <p
+            class="text-gray-300 text-xs sm:text-sm leading-relaxed font-sans max-w-xl mx-auto"
+          >
+            Shruti, main sach me bohot sorry hoon. Mujhe pata hai maine aapka
+            dil dukhaya, par system audit report me 100% loyalty aur zero eyes
+            for anyone else strictly verified hai. Ek baar gussa shant kardo na
+            please? 🥺
+          </p>
+
+          <!-- Interactive Choice Buttons Area -->
+          <div
+            class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-6 min-h-[100px] relative"
+            id="button-boundary"
+          >
+            <!-- YES Button -->
+            <button
+              onclick="grantForgiveness()"
+              class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-black font-extrabold px-9 py-4 rounded-xl shadow-[0_0_25px_rgba(16,185,129,0.6)] transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 text-sm z-20 cursor-pointer"
+            >
+              <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+              <span>YES! (Forgive Him 💖)</span>
+            </button>
+
+            <!-- NO Button (The Smart Touch/Cursor Dodger) -->
+            <button
+              id="no-btn"
+              onmouseenter="dodgeButton()"
+              onclick="dodgeButton()"
+              ontouchstart="dodgeButton(event)"
+              class="w-full sm:w-auto bg-slate-900/90 border border-red-500/50 text-red-400 font-bold px-9 py-4 rounded-xl text-sm z-10 flex items-center justify-center space-x-2 select-none"
+            >
+              <i data-lucide="x-circle" class="w-4 h-4"></i>
+              <span id="no-btn-text">NO (Stay Angry)</span>
+            </button>
+          </div>
+
+          <!-- Dodge Notification Message -->
+          <div
+            id="dodge-msg"
+            class="text-xs text-love-gold hidden font-mono animate-bounce pt-2"
+          >
+            ⚠️ ACCESS DENIED: Nice try, Shruti! Only 'Yes' works here ❤️
+          </div>
+        </div>
+      </section>
+
+      <!-- DYNAMIC CERTIFICATE GENERATOR (Hidden until YES is clicked) -->
+      <section
+        id="certificate-section"
+        class="hidden transition-all duration-700"
+      >
+        <div
+          class="glass-card-cyan border-2 border-love-cyan/60 rounded-2xl p-6 sm:p-10 relative overflow-hidden shadow-[0_0_50px_rgba(0,240,255,0.2)]"
+        >
+          <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-love-cyan/30 pb-6 mb-6 gap-4"
+          >
+            <div>
+              <div
+                class="text-love-cyan font-mono font-bold text-xs tracking-widest uppercase"
+              >
+                OFFICIAL SYSTEM RECORDS
+              </div>
+              <h3
+                class="text-2xl sm:text-3xl font-extrabold text-white tracking-wider glow-cyan mt-1"
+              >
+                CERTIFICATE OF ABSOLUTE LOYALTY & FORGIVENESS
+              </h3>
+            </div>
+            <div
+              class="bg-cyan-950/60 border border-love-cyan/40 px-3.5 py-2 rounded-xl text-right"
+            >
+              <div class="text-[10px] text-gray-400 font-mono">
+                VERIFICATION HASH
+              </div>
+              <div
+                class="text-love-emerald font-bold font-mono text-xs sm:text-sm"
+                id="cert-serial"
+              >
+                SHRUTI-LOYL-2026-TRUST
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6 text-gray-200">
+            <p class="text-sm sm:text-base leading-relaxed">
+              This document officially certifies that
+              <strong class="text-love-pink">SHRUTI</strong> has executed the
+              <strong>[FORGIVENESS OVERRIDE]</strong>, permanently sealing
+              unbreakable trust and devotion with
+              <strong class="text-love-cyan">RAUNAK</strong>.
+            </p>
+
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm font-mono bg-black/60 p-4 rounded-xl border border-love-border"
+            >
+              <div class="space-y-2">
+                <div>
+                  <span class="text-gray-500">ISSUED TO:</span>
+                  <span class="text-white font-bold">Raunak</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">ISSUED BY:</span>
+                  <span class="text-love-pink font-bold">Shruti</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">LOYALTY RATING:</span>
+                  <span class="text-love-emerald font-bold"
+                    >100% UNCONDITIONAL</span
+                  >
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div>
+                  <span class="text-gray-500">TIMESTAMP:</span>
+                  <span class="text-love-cyan" id="cert-timestamp">--</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">ACCESS LEVEL:</span>
+                  <span class="text-white">Single-Tenant Permanent Lock</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">VALIDITY:</span>
+                  <span class="text-love-emerald font-bold"
+                    >LIFETIME & BEYOND</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="p-4 bg-love-pink/10 border-l-4 border-love-pink rounded-lg text-xs sm:text-sm italic text-gray-200"
+            >
+              "Main humesha tumhare sath bohot loyal rahunga Shruti. Kabhi kisi
+              aur taraf dhyan nahi jayega. Thank you for forgiving me!" ❤️
+            </div>
+          </div>
+
+          <!-- Hidden Native Canvas used to generate PNG download -->
+          <canvas id="cert-canvas" class="hidden"></canvas>
+
+          <!-- Certificate Footer & Download Button -->
+          <div
+            class="mt-8 pt-6 border-t border-love-cyan/30 flex flex-col sm:flex-row justify-between items-center gap-4"
+          >
+            <div class="text-center sm:text-left">
+              <div class="font-mono text-xs text-gray-400">
+                DIGITAL SIGNATURE
+              </div>
+              <div
+                class="font-cursive text-2xl text-love-pink tracking-wider mt-1 glow-pink"
+              >
+                Raunak & Shruti Forever
+              </div>
+            </div>
+
+            <button
+              onclick="downloadCertificateImage()"
+              class="w-full sm:w-auto bg-love-cyan hover:bg-cyan-300 text-black font-extrabold px-7 py-3 rounded-xl text-xs sm:text-sm transition-all flex items-center justify-center space-x-2 shadow-lg cursor-pointer"
+            >
+              <i data-lucide="download" class="w-4.5 h-4.5"></i>
+              <span>Download Official Certificate (PNG)</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      class="w-full border-t border-love-border bg-black/80 py-4 px-4 text-center text-xs text-gray-500 relative z-10"
+    >
+      <div
+        class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 font-mono"
+      >
+        <div>
+          Crafted with 💖 & Code exclusively for
+          <span class="text-love-pink font-bold">Shruti</span> by
+          <span class="text-love-cyan font-bold">Raunak</span>
+        </div>
+        <div class="text-[11px] text-gray-600">
+          SYSTEM ID: SHRUTI-LOYL-2026 • ALL RIGHTS RESERVED
+        </div>
+      </div>
+    </footer>
+
+    <!-- LOGIC & APPLICATION ENGINE -->
+    <script>
+      // -------------------------------------------------------------
+      // 1. BACKGROUND FLOATING PARTICLES & HEARTS CANVAS ENGINE
+      // -------------------------------------------------------------
+      const bgCanvas = document.getElementById("particle-canvas");
+      const bgCtx = bgCanvas.getContext("2d");
+      let particles = [];
+
+      function resizeBgCanvas() {
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeBgCanvas);
+      resizeBgCanvas();
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * bgCanvas.width;
+          this.y = bgCanvas.height + Math.random() * 50;
+          this.size = Math.random() * 12 + 6;
+          this.speedY = Math.random() * 0.8 + 0.3;
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.2;
+          this.isHeart = Math.random() > 0.4;
+          this.color = Math.random() > 0.5 ? "#ff2a75" : "#00f0ff";
+        }
+        update() {
+          this.y -= this.speedY;
+          this.x += this.speedX;
+          if (this.y < -20) this.reset();
+        }
+        draw() {
+          bgCtx.save();
+          bgCtx.globalAlpha = this.opacity;
+          bgCtx.fillStyle = this.color;
+          if (this.isHeart) {
+            // Draw Mini Floating Heart
+            bgCtx.font = `${this.size}px sans-serif`;
+            bgCtx.fillText("💖", this.x, this.y);
+          } else {
+            // Draw Glowing Circle Particle
+            bgCtx.beginPath();
+            bgCtx.arc(this.x, this.y, this.size / 3, 0, Math.PI * 2);
+            bgCtx.fill();
+          }
+          bgCtx.restore();
+        }
+      }
+
+      for (let i = 0; i < 35; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        particles.forEach((p) => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      // -------------------------------------------------------------
+      // 2. SYNTHESIZED AUDIO ENGINE (Web Audio API - No external assets)
+      // -------------------------------------------------------------
+      let soundEnabled = true;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      let audioCtx = null;
+
+      function initAudio() {
+        if (!audioCtx) {
+          audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+      }
+
+      function playBeep(freq = 500, type = "sine", duration = 0.08) {
+        if (!soundEnabled) return;
+        try {
+          initAudio();
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioCtx.currentTime + duration,
+          );
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      function playVictorySound() {
+        if (!soundEnabled) return;
+        try {
+          initAudio();
+          const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51]; // C5, E5, G5, C6, E6
+          notes.forEach((freq, idx) => {
+            setTimeout(() => {
+              playBeep(freq, "triangle", 0.22);
+            }, idx * 110);
+          });
+        } catch (e) {}
+      }
+
+      document
+        .getElementById("audio-toggle-btn")
+        .addEventListener("click", () => {
+          soundEnabled = !soundEnabled;
+          const icon = document.getElementById("audio-icon");
+          const text = document.getElementById("audio-text");
+          if (soundEnabled) {
+            text.innerText = "SOUND: ON";
+            icon.setAttribute("data-lucide", "volume-2");
+            playBeep(700, "sine", 0.1);
+          } else {
+            text.innerText = "SOUND: OFF";
+            icon.setAttribute("data-lucide", "volume-x");
+          }
+          lucide.createIcons();
+        });
+
+      // -------------------------------------------------------------
+      // 3. UPTIME COUNTER & LIVE CLOCK
+      // -------------------------------------------------------------
+      const startTime = Date.now();
+      function updateClocks() {
+        const diffSec = Math.floor((Date.now() - startTime) / 1000);
+        const hrs = String(Math.floor(diffSec / 3600)).padStart(2, "0");
+        const mins = String(Math.floor((diffSec % 3600) / 60)).padStart(2, "0");
+        const secs = String(diffSec % 60).padStart(2, "0");
+        document.getElementById("uptime-counter").innerText =
+          `${hrs}:${mins}:${secs}`;
+      }
+      setInterval(updateClocks, 1000);
+
+      // -------------------------------------------------------------
+      // 4. CLI TERMINAL LOGIC & COMMAND HANDLING
+      // -------------------------------------------------------------
+      const terminalBody = document.getElementById("terminal-body");
+
+      function appendToTerminal(htmlContent) {
+        const div = document.createElement("div");
+        div.innerHTML = htmlContent;
+        terminalBody.appendChild(div);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+        playBeep(850, "square", 0.03);
+      }
+
+      function clearTerminal() {
+        terminalBody.innerHTML = `
+                <div class="text-love-cyan">
+                    [TERMINAL CONSOLE CLEARED]<br>
+                    Ready for commands. Type 'help' for options.
+                </div>
+            `;
+        playBeep(400, "sine", 0.08);
+      }
+
+      function handleTerminalKey(e) {
+        if (e.key === "Enter") {
+          submitTypedCommand();
+        }
+      }
+
+      function submitTypedCommand() {
+        const input = document.getElementById("terminal-input");
+        const cmd = input.value.trim().toLowerCase();
+        if (!cmd) return;
+
+        appendToTerminal(
+          `<div><span class="text-love-pink font-bold">&gt; ${input.value}</span></div>`,
+        );
+        input.value = "";
+        executeCommand(cmd);
+      }
+
+      function executeCommand(cmd) {
+        initAudio();
+        switch (cmd) {
+          case "system_diag":
+          case "diag":
+          case "status":
+            appendToTerminal(`
+                        <div class="text-love-cyan space-y-1 my-2">
+                            <p>[RUNNING DEEP SYSTEM DIAGNOSTICS...]</p>
+                            <p class="text-love-emerald">[LOG 01] Heart Cluster: 100% occupied by Shruti.</p>
+                            <p class="text-love-pink">[LOG 02] Error 404: Eyes for anyone else NOT FOUND.</p>
+                            <p class="text-love-purple">[LOG 03] Security Protocol: 256-Bit Unconditional Loyalty Verified.</p>
+                            <p class="text-love-gold">[LOG 04] Active Priority: Waiting for Shruti's smile & forgiveness...</p>
+                        </div>
+                    `);
+            break;
+
+          case "verify_loyalty":
+          case "loyalty":
+            appendToTerminal(`
+                        <div class="text-love-emerald space-y-1 my-2">
+                            <p>&gt; VERIFYING LOYALTY CREDENTIALS...</p>
+                            <p class="text-white">&gt; RESULT: MATCH CONFIRMED (100% Single-Tenant Node Locked to Shruti)</p>
+                        </div>
+                    `);
+            renderLoyaltyVaultCards();
+            break;
+
+          case "decrypt_promises":
+          case "promises":
+            appendToTerminal(`
+                        <div class="text-love-purple space-y-1 my-2">
+                            <p>&gt; DECRYPTING HOLOGRAPHIC PROMISE VAULT...</p>
+                            <p class="text-white">&gt; 3 Encrypted promises unlocked below!</p>
+                        </div>
+                    `);
+            renderPromiseCards();
+            break;
+
+          case "apology_log":
+          case "sorry":
+            appendToTerminal(`
+                        <div class="text-love-pink space-y-1 my-2">
+                            <p>&gt; FETCHING HANDWRITTEN APOLOGY LOGS...</p>
+                            <p class="text-gray-200">"Shruti, main dil se bohot sorry hoon. Main aage se humesha tumhari feeling aur gusse ka khayal rakhunga."</p>
+                        </div>
+                    `);
+            break;
+
+          case "help":
+            appendToTerminal(`
+                        <div class="text-gray-300 space-y-1 my-1">
+                            <p class="text-love-cyan">AVAILABLE SYSTEM COMMANDS:</p>
+                            <p>• <span class="text-love-pink font-bold">system_diag</span> - Run deep diagnostic logs</p>
+                            <p>• <span class="text-love-cyan font-bold">verify_loyalty</span> - Render 3D Loyalty Vault Cards</p>
+                            <p>• <span class="text-love-purple font-bold">decrypt_promises</span> - Decrypt handwritten promises</p>
+                            <p>• <span class="text-love-emerald font-bold">apology_log</span> - Read personal apology note</p>
+                            <p>• <span class="text-gray-400 font-bold">clear</span> - Clear console screen</p>
+                        </div>
+                    `);
+            break;
+
+          case "clear":
+            clearTerminal();
+            break;
+
+          default:
+            appendToTerminal(`
+                        <div class="text-red-400 my-1">
+                            Command '${cmd}' not recognized. Type <span class="text-love-pink font-bold">help</span> for available routines.
+                        </div>
+                    `);
+            break;
+        }
+      }
+
+      // -------------------------------------------------------------
+      // 5. CARDS RENDER ENGINE
+      // -------------------------------------------------------------
+      function renderLoyaltyVaultCards() {
+        const area = document.getElementById("dynamic-display-area");
+        area.classList.remove("hidden");
+        area.innerHTML = `
+                <div class="glass-card p-5 rounded-2xl border border-love-emerald/40 text-center animate-float">
+                    <div class="w-10 h-10 mx-auto rounded-full bg-emerald-950/80 border border-love-emerald flex items-center justify-center text-love-emerald mb-3">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="text-love-emerald font-bold text-sm font-mono">Single-Tenant Lock</h4>
+                    <p class="text-gray-300 text-xs mt-2 leading-relaxed">
+                        System access is 100% locked to Shruti. Zero capability to entertain or look at anyone else.
+                    </p>
+                </div>
+
+                <div class="glass-card-cyan p-5 rounded-2xl border border-love-cyan/40 text-center animate-float" style="animation-delay: 0.2s">
+                    <div class="w-10 h-10 mx-auto rounded-full bg-cyan-950/80 border border-love-cyan flex items-center justify-center text-love-cyan mb-3">
+                        <i data-lucide="heart" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="text-love-cyan font-bold text-sm font-mono">Pure Devotion</h4>
+                    <p class="text-gray-300 text-xs mt-2 leading-relaxed">
+                        Har effort, har code line, aur har thought sirf Shruti ko khush rakhne ke liye dedicated hai.
+                    </p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-love-pink/40 text-center animate-float" style="animation-delay: 0.4s">
+                    <div class="w-10 h-10 mx-auto rounded-full bg-pink-950/80 border border-love-pink flex items-center justify-center text-love-pink mb-3">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="text-love-pink font-bold text-sm font-mono">Lifetime Validity</h4>
+                    <p class="text-gray-300 text-xs mt-2 leading-relaxed">
+                        Encrypted commitment with lifetime validity. Unbreakable bond with zero expiry date.
+                    </p>
+                </div>
+            `;
+        lucide.createIcons();
+        area.scrollIntoView({ behavior: "smooth" });
+      }
+
+      function renderPromiseCards() {
+        const area = document.getElementById("dynamic-display-area");
+        area.classList.remove("hidden");
+        area.innerHTML = `
+                <div class="glass-card p-5 rounded-2xl border border-love-purple/40 space-y-2">
+                    <div class="flex items-center space-x-2 text-love-purple font-mono font-bold text-xs">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        <span>PROMISE #01</span>
+                    </div>
+                    <h4 class="text-white font-bold text-sm">Infinite Patience</h4>
+                    <p class="text-gray-300 text-xs leading-relaxed">
+                        Main kabhi bina wajah gussa nahi hunga aur hamesha tumhari baat sabse pehle sununga.
+                    </p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-love-purple/40 space-y-2">
+                    <div class="flex items-center space-x-2 text-love-purple font-mono font-bold text-xs">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        <span>PROMISE #02</span>
+                    </div>
+                    <h4 class="text-white font-bold text-sm">Zero Ego Apology</h4>
+                    <p class="text-gray-300 text-xs leading-relaxed">
+                        Jab bhi galti hogi, bina kisi ego ke sabse pehle sorry bolke baat sort karunga.
+                    </p>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-love-purple/40 space-y-2">
+                    <div class="flex items-center space-x-2 text-love-purple font-mono font-bold text-xs">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        <span>PROMISE #03</span>
+                    </div>
+                    <h4 class="text-white font-bold text-sm">Always Priority #01</h4>
+                    <p class="text-gray-300 text-xs leading-relaxed">
+                        Aap meri life me humesha sabse pehle aur sabse khas rahogi. Always!
+                    </p>
+                </div>
+            `;
+        lucide.createIcons();
+        area.scrollIntoView({ behavior: "smooth" });
+      }
+
+      // -------------------------------------------------------------
+      // 6. SMART TOUCH / CURSOR DODGING "NO" BUTTON LOGIC
+      // -------------------------------------------------------------
+      let dodgeCount = 0;
+      function dodgeButton(event) {
+        if (event) {
+          event.preventDefault();
+        }
+        dodgeCount++;
+        playBeep(350 + Math.random() * 350, "sawtooth", 0.05);
+
+        const btn = document.getElementById("no-btn");
+
+        const maxX = Math.min(130, window.innerWidth / 2 - 70);
+        const maxY = 55;
+
+        const randomX = (Math.random() - 0.5) * maxX * 2;
+        const randomY = (Math.random() - 0.5) * maxY * 2;
+
+        btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+
+        document.getElementById("dodge-msg").classList.remove("hidden");
+
+        const prompts = [
+          "NO (Stay Angry)",
+          "Nice try, Shruti! Only 'Yes' works here ❤️",
+          "Error 403: Forbidden!",
+          "Try YES instead! 😉",
+          "Access Denied!",
+        ];
+        document.getElementById("no-btn-text").innerText =
+          prompts[dodgeCount % prompts.length];
+      }
+
+      // -------------------------------------------------------------
+      // 7. YES BUTTON & FORGIVENESS EXECUTION
+      // -------------------------------------------------------------
+      function grantForgiveness() {
+        playVictorySound();
+
+        // Fireworks Confetti Trigger
+        if (typeof confetti === "function") {
+          confetti({
+            particleCount: 150,
+            spread: 90,
+            origin: { y: 0.6 },
+            colors: ["#ff2a75", "#00f0ff", "#10b981", "#a855f7", "#fbbf24"],
+          });
+        }
+
+        appendToTerminal(`
+                <div class="text-love-emerald font-bold my-2 p-2.5 bg-emerald-950/50 border border-love-emerald/60 rounded-xl">
+                    🎉 SUCCESS: FORGIVENESS OVERRIDE GRANTED BY SHRUTI! <br>
+                    System status permanently restored to 100% PERFECT HARMONY.
+                </div>
+            `);
+
+        const certSection = document.getElementById("certificate-section");
+        certSection.classList.remove("hidden");
+
+        const now = new Date();
+        document.getElementById("cert-timestamp").innerText =
+          now.toLocaleString();
+
+        setTimeout(() => {
+          certSection.scrollIntoView({ behavior: "smooth" });
+        }, 300);
+      }
+
+      // -------------------------------------------------------------
+      // 8. DYNAMIC PNG CERTIFICATE CANVAS GENERATOR & DOWNLOAD
+      // -------------------------------------------------------------
+      function downloadCertificateImage() {
+        playBeep(750, "sine", 0.1);
+
+        const canvas = document.getElementById("cert-canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Set High Resolution Canvas Dimensions
+        canvas.width = 1000;
+        canvas.height = 650;
+
+        // Background Gradient
+        const grad = ctx.createRadialGradient(500, 325, 50, 500, 325, 600);
+        grad.addColorStop(0, "#170d24");
+        grad.addColorStop(1, "#050308");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Outer Glowing Border
+        ctx.strokeStyle = "#00f0ff";
+        ctx.lineWidth = 6;
+        ctx.strokeRect(20, 20, 960, 610);
+
+        ctx.strokeStyle = "#ff2a75";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(30, 30, 940, 590);
+
+        // Certificate Header Text
+        ctx.fillStyle = "#00f0ff";
+        ctx.font = 'bold 16px "Fira Code", monospace';
+        ctx.textAlign = "center";
+        ctx.fillText("OFFICIAL SYSTEM RECORDS • LOYALTY PROTOCOL", 500, 75);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = 'extrabold 32px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText("CERTIFICATE OF ABSOLUTE LOYALTY", 500, 125);
+
+        // Decorative Divider
+        ctx.strokeStyle = "#ff2a75";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(300, 145);
+        ctx.lineTo(700, 145);
+        ctx.stroke();
+
+        // Certification Body Text
+        ctx.fillStyle = "#e2e8f0";
+        ctx.font = '18px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText("This document officially certifies that", 500, 200);
+
+        ctx.fillStyle = "#ff2a75";
+        ctx.font = 'bold 30px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText("SHRUTI", 500, 245);
+
+        ctx.fillStyle = "#e2e8f0";
+        ctx.font = '17px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(
+          "has executed the Forgiveness Command, permanently locking unconditional devotion with",
+          500,
+          290,
+        );
+
+        ctx.fillStyle = "#00f0ff";
+        ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText("RAUNAK", 500, 330);
+
+        // Metadata Box
+        ctx.fillStyle = "rgba(0,0,0,0.6)";
+        ctx.fillRect(100, 370, 800, 110);
+        ctx.strokeStyle = "rgba(0, 240, 255, 0.3)";
+        ctx.strokeRect(100, 370, 800, 110);
+
+        ctx.textAlign = "left";
+        ctx.font = '14px "Fira Code", monospace';
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillText("SERIAL HASH:", 130, 405);
+        ctx.fillStyle = "#10b981";
+        ctx.fillText("SHRUTI-LOYL-2026-TRUST", 260, 405);
+
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillText("LOYALTY RATING:", 130, 445);
+        ctx.fillStyle = "#10b981";
+        ctx.fillText("100% UNCONDITIONAL", 260, 445);
+
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillText("TIMESTAMP:", 560, 405);
+        ctx.fillStyle = "#00f0ff";
+        ctx.fillText(new Date().toLocaleDateString(), 670, 405);
+
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillText("VALIDITY:", 560, 445);
+        ctx.fillStyle = "#10b981";
+        ctx.fillText("LIFETIME & BEYOND", 670, 445);
+
+        // Signatures
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#ff2a75";
+        ctx.font = '36px "Dancing Script", cursive';
+        ctx.fillText("Raunak & Shruti Forever", 500, 545);
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = '12px "Fira Code", monospace';
+        ctx.fillText("DIGITAL LOYALTY SIGNATURE VERIFIED", 500, 575);
+
+        // Download Trigger
+        const link = document.createElement("a");
+        link.download = "Shruti_Raunak_Loyalty_Certificate.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }
+
+      // Initialize Icons on Load
+      window.onload = function () {
+        lucide.createIcons();
+        playBeep(523.25, "sine", 0.1);
+      };
+    </script>
+  </body>
+</html>
